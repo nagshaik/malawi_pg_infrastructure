@@ -83,3 +83,49 @@ output "kafka_security_group_id" {
   description = "Security group ID for Kafka cluster"
   value       = aws_security_group.kafka_sg.id
 }
+
+# ELK (OpenSearch) Outputs
+output "elk_domain_endpoint" {
+  description = "Domain-specific endpoint used to submit index, search, and data upload requests"
+  value       = aws_opensearch_domain.elk.endpoint
+}
+
+output "elk_domain_arn" {
+  description = "ARN of the OpenSearch domain"
+  value       = aws_opensearch_domain.elk.arn
+}
+
+output "elk_dashboard_endpoint" {
+  description = "Domain-specific endpoint for OpenSearch Dashboards"
+  value       = aws_opensearch_domain.elk.dashboard_endpoint
+}
+
+output "elk_domain_id" {
+  description = "Unique identifier for the OpenSearch domain"
+  value       = aws_opensearch_domain.elk.domain_id
+}
+
+output "elk_security_group_id" {
+  description = "Security group ID for ELK cluster"
+  value       = aws_security_group.opensearch_sg.id
+}
+
+output "elk_cloudwatch_log_group_application" {
+  description = "CloudWatch log group for OpenSearch application logs"
+  value       = aws_cloudwatch_log_group.opensearch_application_logs.name
+}
+
+output "elk_cloudwatch_log_group_index" {
+  description = "CloudWatch log group for OpenSearch index slow logs"
+  value       = aws_cloudwatch_log_group.opensearch_index_logs.name
+}
+
+output "elk_cloudwatch_log_group_search" {
+  description = "CloudWatch log group for OpenSearch search slow logs"
+  value       = aws_cloudwatch_log_group.opensearch_search_logs.name
+}
+
+output "elk_cloudwatch_log_group_audit" {
+  description = "CloudWatch log group for OpenSearch audit logs"
+  value       = aws_cloudwatch_log_group.opensearch_audit_logs.name
+}

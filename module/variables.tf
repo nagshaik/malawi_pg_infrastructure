@@ -282,3 +282,197 @@ variable "kafka_enhanced_monitoring" {
   description = "Enhanced monitoring level: DEFAULT, PER_BROKER, PER_TOPIC_PER_BROKER, PER_TOPIC_PER_PARTITION"
   default     = "DEFAULT"
 }
+
+# ELK / OpenSearch Variables
+variable "elk_engine_version" {
+  type        = string
+  description = "OpenSearch engine version"
+  default     = "OpenSearch_2.11"
+}
+
+variable "elk_instance_type" {
+  type        = string
+  description = "Instance type for OpenSearch data nodes"
+  default     = "r7g.medium.search"
+}
+
+variable "elk_instance_count" {
+  type        = number
+  description = "Number of data nodes in the cluster"
+  default     = 2
+}
+
+variable "elk_zone_awareness_enabled" {
+  type        = bool
+  description = "Enable zone awareness for Multi-AZ deployment"
+  default     = true
+}
+
+variable "elk_availability_zone_count" {
+  type        = number
+  description = "Number of availability zones (2 or 3)"
+  default     = 2
+}
+
+variable "elk_dedicated_master_enabled" {
+  type        = bool
+  description = "Enable dedicated master nodes (recommended for production)"
+  default     = true
+}
+
+variable "elk_dedicated_master_type" {
+  type        = string
+  description = "Instance type for dedicated master nodes"
+  default     = "r7g.medium.search"
+}
+
+variable "elk_dedicated_master_count" {
+  type        = number
+  description = "Number of dedicated master nodes (minimum 3 required)"
+  default     = 3
+}
+
+variable "elk_warm_enabled" {
+  type        = bool
+  description = "Enable warm nodes for UltraWarm storage tier"
+  default     = false
+}
+
+variable "elk_warm_count" {
+  type        = number
+  description = "Number of warm nodes"
+  default     = 2
+}
+
+variable "elk_warm_type" {
+  type        = string
+  description = "Instance type for warm nodes"
+  default     = "ultrawarm1.medium.search"
+}
+
+variable "elk_ebs_volume_size" {
+  type        = number
+  description = "EBS volume size per node (GB)"
+  default     = 100
+}
+
+variable "elk_ebs_volume_type" {
+  type        = string
+  description = "EBS volume type: gp3, gp2, io1"
+  default     = "gp3"
+}
+
+variable "elk_ebs_iops" {
+  type        = number
+  description = "IOPS for io1 or gp3 volumes"
+  default     = 3000
+}
+
+variable "elk_ebs_throughput" {
+  type        = number
+  description = "Throughput for gp3 volumes (MB/s)"
+  default     = 125
+}
+
+variable "elk_encrypt_at_rest" {
+  type        = bool
+  description = "Enable encryption at rest"
+  default     = true
+}
+
+variable "elk_kms_key_id" {
+  type        = string
+  description = "KMS key ID for encryption (empty for AWS managed key)"
+  default     = ""
+}
+
+variable "elk_node_to_node_encryption" {
+  type        = bool
+  description = "Enable node-to-node encryption"
+  default     = true
+}
+
+variable "elk_advanced_security_enabled" {
+  type        = bool
+  description = "Enable fine-grained access control"
+  default     = true
+}
+
+variable "elk_internal_user_database_enabled" {
+  type        = bool
+  description = "Enable internal user database for authentication"
+  default     = true
+}
+
+variable "elk_master_username" {
+  type        = string
+  description = "Master username for OpenSearch"
+  default     = "admin"
+}
+
+variable "elk_master_password" {
+  type        = string
+  description = "Master password for OpenSearch (min 8 chars, must include uppercase, lowercase, number, special char)"
+  sensitive   = true
+}
+
+variable "elk_log_retention_days" {
+  type        = number
+  description = "CloudWatch log retention days"
+  default     = 30
+}
+
+variable "elk_automated_snapshot_start_hour" {
+  type        = number
+  description = "Hour to start automated snapshots (UTC, 0-23)"
+  default     = 3
+}
+
+variable "elk_auto_tune_desired_state" {
+  type        = string
+  description = "Auto-Tune desired state: ENABLED or DISABLED"
+  default     = "ENABLED"
+}
+
+variable "elk_auto_tune_maintenance_start" {
+  type        = string
+  description = "Auto-Tune maintenance start time (RFC3339 format)"
+  default     = "2025-11-06T00:00:00Z"
+}
+
+variable "elk_auto_tune_maintenance_duration" {
+  type        = number
+  description = "Auto-Tune maintenance window duration (hours)"
+  default     = 2
+}
+
+variable "elk_auto_tune_cron_expression" {
+  type        = string
+  description = "Cron expression for Auto-Tune maintenance schedule"
+  default     = "cron(0 3 ? * SUN *)"
+}
+
+variable "elk_create_service_linked_role" {
+  type        = bool
+  description = "Create IAM service-linked role for OpenSearch (set false if already exists)"
+  default     = false
+}
+
+variable "elk_free_storage_alarm_threshold" {
+  type        = number
+  description = "Free storage space alarm threshold (MB)"
+  default     = 10000
+}
+
+variable "elk_cpu_alarm_threshold" {
+  type        = number
+  description = "CPU utilization alarm threshold (percentage)"
+  default     = 80
+}
+
+variable "elk_jvm_memory_alarm_threshold" {
+  type        = number
+  description = "JVM memory pressure alarm threshold (percentage)"
+  default     = 85
+}
+

@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  namespace: logging
+  labels:
+    app: logstash
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      labels:
+        app: logstash
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9600"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: logstash
+      securityContext:
+        fsGroup: 1000
+      
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash:8.11.0
+        imagePullPolicy: IfNotPresent
+        
+        ports:
+        - name: tcp
+          containerPort: 5000
+          protocol: TCP
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: beats
+          containerPort: 5044
+          protocol: TCP
+        - name: monitoring
+          containerPort: 9600
+          protocol: TCP
+        
+        env:
+        - name: LS_JAVA_OPTS
+          value: "-Xms1g -Xmx1g"
+        - name: OPENSEARCH_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: opensearch-credentials
+              key: OPENSEARCH_ENDPOINT
+        - name: OPENSEARCH_USER
+          valueFrom:
+            secretKeyRef:
+              name: opensearch-credentials
+              key: OPENSEARCH_USER
+        - name: OPENSEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: opensearch-credentials
+              key: OPENSEARCH_PASSWORD
+        
+        resources:
+          requests:
+            memory: "1.5Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9600
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9600
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        volumeMounts:
+        - name: config
+          mountPath: /usr/share/logstash/config/logstash.yml
+          subPath: logstash.yml
+          readOnly: true
+        - name: config
+          mountPath: /usr/share/logstash/config/pipelines.yml
+          subPath: pipelines.yml
+          readOnly: true
+        - name: pipeline
+          mountPath: /usr/share/logstash/pipeline
+          readOnly: true
+        - name: data
+          mountPath: /usr/share/logstash/data
+      
+      volumes:
+      - name: config
+        configMap:
+          name: logstash-config
+      - name: pipeline
+        configMap:
+          name: logstash-pipeline
+      - name: data
+        emptyDir: {}
+      
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - logstash
+              topologyKey: kubernetes.io/hostname

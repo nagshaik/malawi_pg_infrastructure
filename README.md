@@ -19,9 +19,26 @@ Welcome to the repository for **Configuring Production-Ready EKS Clusters with T
 This project covers:
 - **Infrastructure as Code (IaC)**: Use Terraform to define and manage your EKS cluster.
 - **CI/CD Automation**: Leverage GitHub Actions to automate deployments.
+- **Production Services**: Redis, Kafka (MSK), and ELK (OpenSearch) for enterprise-grade applications.
 
 ## 🌟 Comprehensive Guide
 For a detailed guide, please refer to my [blog post on Medium](https://medium.com/p/c046e8d44865).
+
+## 📚 Service Documentation
+
+This infrastructure includes production-ready services with comprehensive setup guides:
+
+- **[Redis Setup Guide](REDIS_SETUP.md)** - ElastiCache Redis Multi-AZ cluster for caching and session management
+- **[Kafka Setup Guide](KAFKA_SETUP.md)** - Amazon MSK Multi-AZ cluster for event streaming and messaging
+- **[ELK Stack Setup Guide](ELK_SETUP.md)** - Amazon OpenSearch Service for centralized logging, search, and analytics
+
+Each guide includes:
+- Architecture overview and best practices
+- Security configuration and access methods
+- Monitoring and alerting setup
+- Performance optimization tips
+- Troubleshooting common issues
+- Code examples in multiple languages
 
 ## 🤝 Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
