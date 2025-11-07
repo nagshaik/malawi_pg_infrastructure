@@ -40,6 +40,8 @@ resource "aws_instance" "mongodb" {
   root_block_device {
     volume_size = var.mongodb_volume_size
     volume_type = "gp3"
+    iops        = 3000     # gp3 default IOPS
+    throughput  = 125      # gp3 default throughput (MB/s)
   }
 
   user_data = <<-EOF

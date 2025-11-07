@@ -476,3 +476,4 @@ variable "elk_jvm_memory_alarm_threshold" {
   default     = 85
 }
 
+

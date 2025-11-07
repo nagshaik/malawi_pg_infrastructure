@@ -56,6 +56,12 @@ resource "aws_db_instance" "mysql" {
   backup_window          = "03:00-04:00"
   maintenance_window     = "Mon:04:00-Mon:05:00"
 
+  # Apply changes immediately instead of during maintenance window
+  apply_immediately      = true
+  
+  # Allow storage to be modified
+  max_allocated_storage  = 1000  # Enable storage autoscaling up to 1TB
+
   skip_final_snapshot    = true
 
   tags = {

@@ -10,6 +10,27 @@ output "cluster_name" {
   value = aws_eks_cluster.eks[0].name
 }
 
+output "vpc_id" {
+  description = "VPC ID where EKS cluster is deployed"
+  value       = aws_vpc.vpc.id
+}
+
+# OIDC provider outputs for IRSA integrations (e.g., AWS Load Balancer Controller)
+output "oidc_provider_arn" {
+  description = "ARN of the EKS cluster's IAM OIDC provider"
+  value       = aws_iam_openid_connect_provider.eks-oidc.arn
+}
+
+output "oidc_provider_url" {
+  description = "URL of the EKS cluster's IAM OIDC provider"
+  value       = aws_iam_openid_connect_provider.eks-oidc.url
+}
+
+output "cluster_oidc_issuer" {
+  description = "OIDC issuer URL for the EKS cluster"
+  value       = aws_eks_cluster.eks[0].identity[0].oidc[0].issuer
+}
+
 output "eks_cluster_role_arn" {
   description = "IAM role ARN used for EKS control plane (cluster role)"
   value       = aws_iam_role.eks-cluster-role[0].arn
@@ -128,4 +149,19 @@ output "elk_cloudwatch_log_group_search" {
 output "elk_cloudwatch_log_group_audit" {
   description = "CloudWatch log group for OpenSearch audit logs"
   value       = aws_cloudwatch_log_group.opensearch_audit_logs.name
+}
+# VPC and Subnet Outputs
+output "private_subnet_ids" {
+  description = "List of private subnet IDs"
+  value       = aws_subnet.private-subnet[*].id
+}
+
+output "public_subnet_ids" {
+  description = "List of public subnet IDs"
+  value       = aws_subnet.public-subnet[*].id
+}
+
+output "eks_cluster_security_group_id" {
+  description = "Security group ID for the EKS cluster"
+  value       = aws_security_group.eks-cluster-sg.id
 }
