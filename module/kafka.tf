@@ -54,17 +54,8 @@ resource "aws_security_group" "kafka_sg" {
   }
 }
 
-# Explicit rule to allow AWS-managed EKS cluster security group for SASL/SCRAM
-resource "aws_security_group_rule" "kafka_from_eks_cluster_sg" {
-  count                    = var.is-eks-cluster-enabled ? 1 : 0
-  type                     = "ingress"
-  from_port                = 9096
-  to_port                  = 9096
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.kafka_sg.id
-  source_security_group_id = aws_eks_cluster.eks[0].vpc_config[0].cluster_security_group_id
-  description              = "Allow Kafka SASL/SCRAM access from AWS-managed EKS cluster security group"
-}
+# Note: VPC CIDR ingress rules above already allow all EKS pods to access Kafka
+# No need for separate EKS cluster security group rule
 
 # CloudWatch Log Group for Kafka
 resource "aws_cloudwatch_log_group" "kafka_log_group" {

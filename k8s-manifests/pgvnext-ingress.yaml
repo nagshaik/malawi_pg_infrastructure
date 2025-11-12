@@ -1,0 +1,198 @@
+---
+# Ingress for Checkout API
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgvnext-checkout-api-ingress
+  namespace: ns-pgvnext-checkout-api
+  annotations:
+    alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
+    alb.ingress.kubernetes.io/group.order: '10'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets: subnet-0ee8553b798281422, subnet-01305039c8b7ea096
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /checkout/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /checkout
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-pgvnext-checkout-api-app-service
+            port:
+              number: 8000
+
+---
+# Ingress for Checkout Background Service (Callback)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgvnext-checkout-bg-ingress
+  namespace: ns-pgvnext-checkout-background-service
+  annotations:
+    alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
+    alb.ingress.kubernetes.io/group.order: '20'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /callback/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /callback
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-pgvnext-checkout-background-service-app-service
+            port:
+              number: 8000
+
+---
+# Ingress for Consumer API
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgvnext-consumer-api-ingress
+  namespace: ns-pgvnext-consumer-api
+  annotations:
+    alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
+    alb.ingress.kubernetes.io/group.order: '30'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /consumer/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /consumer
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-pgvnext-consumer-api-app-service
+            port:
+              number: 8000
+
+---
+# Ingress for Core API (C2B)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgvnext-core-api-ingress
+  namespace: ns-pgvnext-core-api
+  annotations:
+    alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
+    alb.ingress.kubernetes.io/group.order: '40'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /c2b/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /c2b
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-app-service
+            port:
+              number: 8000
+
+---
+# Ingress for Admin Panel (Portal UI)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgvnext-admin-panel-ingress
+  namespace: prod-pgvnext-admin-panel-app-namespace
+  annotations:
+    alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
+    alb.ingress.kubernetes.io/group.order: '50'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /admin/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /admin
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-pgvnext-admin-panel-app-service
+            port:
+              number: 8000
+
+---
+# Ingress for Admin Panel Service (Backend API)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgvnext-admin-api-ingress
+  namespace: prod-pgvnext-admin-panel-service-app-namespace
+  annotations:
+    alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
+    alb.ingress.kubernetes.io/group.order: '60'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /adminservice/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /adminservice
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-pgvnext-admin-panel-service-app-service
+            port:
+              number: 8000
+
+---
+# Ingress for Authenticator
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgvnext-authenticator-ingress
+  namespace: prod-pgvnext-authenticator-app-namespace
+  annotations:
+    alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
+    alb.ingress.kubernetes.io/group.order: '70'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /authenticator/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /authenticator
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-pgvnext-authenticator-app-service
+            port:
+              number: 8000
+

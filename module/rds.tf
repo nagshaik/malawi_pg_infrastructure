@@ -33,16 +33,8 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-# Allow access from AWS-managed EKS cluster security group
-resource "aws_security_group_rule" "rds_from_eks_cluster_sg" {
-  type                     = "ingress"
-  from_port                = 3306
-  to_port                  = 3306
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_sg.id
-  source_security_group_id = aws_eks_cluster.eks[0].vpc_config[0].cluster_security_group_id
-  description              = "Allow MySQL access from AWS-managed EKS cluster security group"
-}
+# Note: VPC CIDR ingress rule above already allows all EKS pods to access RDS
+# No need for separate EKS cluster security group rule
 
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "${var.env}-rds-subnet-group"
