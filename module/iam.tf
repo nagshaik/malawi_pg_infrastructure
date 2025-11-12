@@ -68,6 +68,9 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEBSCSIDriverPolicy" {
   role       = aws_iam_role.eks-nodegroup-role[count.index].name
 }
 
+# Allow SSM Session Manager and core SSM features on worker nodes
+## Removed SSM Session Manager policy attachment per user request
+
 # OIDC
 resource "aws_iam_role" "eks_oidc" {
   assume_role_policy = data.aws_iam_policy_document.eks_oidc_assume_role_policy.json

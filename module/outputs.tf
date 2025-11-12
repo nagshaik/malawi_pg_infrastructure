@@ -95,6 +95,11 @@ output "kafka_bootstrap_brokers_tls" {
   value       = aws_msk_cluster.kafka.bootstrap_brokers_tls
 }
 
+output "kafka_bootstrap_brokers_sasl_scram" {
+  description = "SASL/SCRAM TLS connection host:port pairs"
+  value       = aws_msk_cluster.kafka.bootstrap_brokers_sasl_scram
+}
+
 output "kafka_zookeeper_connect_string" {
   description = "Zookeeper connection string"
   value       = aws_msk_cluster.kafka.zookeeper_connect_string
@@ -161,7 +166,7 @@ output "public_subnet_ids" {
   value       = aws_subnet.public-subnet[*].id
 }
 
-output "eks_cluster_security_group_id" {
-  description = "Security group ID for the EKS cluster"
-  value       = aws_security_group.eks-cluster-sg.id
+output "eks_cluster_managed_security_group_id" {
+  description = "AWS-managed security group ID for the EKS cluster (used by worker nodes)"
+  value       = var.is-eks-cluster-enabled ? aws_eks_cluster.eks[0].vpc_config[0].cluster_security_group_id : null
 }

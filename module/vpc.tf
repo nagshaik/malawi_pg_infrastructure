@@ -143,29 +143,18 @@ resource "aws_route_table_association" "private-rt-association" {
   ]
 }
 
-resource "aws_security_group" "eks-cluster-sg" {
-  name        = var.eks-sg
-  description = "Allow 443 from Jump Server only"
+// Removed terraform-managed EKS cluster SG (eks-cluster-sg) to avoid duplicate with AWS-managed one
 
-  vpc_id = aws_vpc.vpc.id
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = var.bastion_allowed_cidr  # Only allow access from bastion host CIDR
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = var.eks-sg
-  }
+# Allow bastion host to access EKS control plane API (port 443)
+resource "aws_security_group_rule" "eks_allow_bastion" {
+  count                    = var.is-eks-cluster-enabled ? 1 : 0
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_eks_cluster.eks[0].vpc_config[0].cluster_security_group_id
+  source_security_group_id = aws_security_group.bastion_sg.id
+  description              = "Allow bastion host to access EKS control plane API"
 }
 
 

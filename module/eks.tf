@@ -9,7 +9,6 @@ resource "aws_eks_cluster" "eks" {
     subnet_ids              = [aws_subnet.private-subnet[0].id, aws_subnet.private-subnet[1].id]
     endpoint_private_access = var.endpoint-private-access
     endpoint_public_access  = var.endpoint-public-access
-    security_group_ids      = [aws_security_group.eks-cluster-sg.id]
   }
 
 
@@ -56,15 +55,18 @@ resource "aws_eks_node_group" "ondemand-node" {
   node_role_arn   = aws_iam_role.eks-nodegroup-role[0].arn
 
   scaling_config {
-    desired_size = 1
-    min_size     = 1
-    max_size     = 1
+    desired_size = var.desired_capacity_on_demand
+    min_size     = var.min_capacity_on_demand
+    max_size     = var.max_capacity_on_demand
   }
 
   subnet_ids = [each.value]
 
   instance_types = var.ondemand_instance_types
   capacity_type  = "ON_DEMAND"
+  
+  disk_size = 50  # 50 GB storage per node
+  
   labels = {
     type = "ondemand"
     zone = each.key

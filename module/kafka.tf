@@ -22,6 +22,15 @@ resource "aws_security_group" "kafka_sg" {
     description = "Allow Kafka TLS from VPC"
   }
 
+  # Kafka SASL/SCRAM communication
+  ingress {
+    from_port   = 9096
+    to_port     = 9096
+    protocol    = "tcp"
+    cidr_blocks = [var.cidr-block]
+    description = "Allow Kafka SASL/SCRAM from VPC"
+  }
+
   # Zookeeper
   ingress {
     from_port   = 2181
@@ -43,6 +52,18 @@ resource "aws_security_group" "kafka_sg" {
     Name = "${var.env}-kafka-sg"
     Env  = var.env
   }
+}
+
+# Explicit rule to allow AWS-managed EKS cluster security group for SASL/SCRAM
+resource "aws_security_group_rule" "kafka_from_eks_cluster_sg" {
+  count                    = var.is-eks-cluster-enabled ? 1 : 0
+  type                     = "ingress"
+  from_port                = 9096
+  to_port                  = 9096
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.kafka_sg.id
+  source_security_group_id = aws_eks_cluster.eks[0].vpc_config[0].cluster_security_group_id
+  description              = "Allow Kafka SASL/SCRAM access from AWS-managed EKS cluster security group"
 }
 
 # CloudWatch Log Group for Kafka
@@ -102,6 +123,13 @@ resource "aws_msk_cluster" "kafka" {
     revision = aws_msk_configuration.kafka_config.latest_revision
   }
 
+  # Enable user-based auth with SASL/SCRAM
+  client_authentication {
+    sasl {
+      scram = true
+    }
+  }
+
   encryption_info {
     encryption_in_transit {
       client_broker = var.kafka_encryption_in_transit_client_broker
@@ -126,4 +154,97 @@ resource "aws_msk_cluster" "kafka" {
     Name = "${var.env}-kafka-cluster"
     Env  = var.env
   }
+}
+
+# KMS key for encrypting Kafka SCRAM secrets (required by MSK)
+resource "aws_kms_key" "kafka_scram" {
+  description             = "KMS key for Kafka SCRAM secrets"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "Enable IAM User Permissions"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "Allow Kafka to use the key"
+        Effect = "Allow"
+        Principal = {
+          Service = "kafka.amazonaws.com"
+        }
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+
+  tags = {
+    Name = "${var.env}-kafka-scram-kms"
+    Env  = var.env
+  }
+}
+
+resource "aws_kms_alias" "kafka_scram" {
+  name          = "alias/${var.env}-kafka-scram"
+  target_key_id = aws_kms_key.kafka_scram.key_id
+}
+
+# Secret for Kafka SASL/SCRAM user credentials (username: client)
+resource "aws_secretsmanager_secret" "kafka_scram_client" {
+  name        = "AmazonMSK_client"
+  description = "SCRAM credentials for Kafka user 'client'"
+  kms_key_id  = aws_kms_key.kafka_scram.arn
+
+  tags = {
+    AWSKafkaSecret = "true"
+    Env            = var.env
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "kafka_scram_client" {
+  secret_id     = aws_secretsmanager_secret.kafka_scram_client.id
+  secret_string = jsonencode({ username = "client", password = "azamPg_pass20" })
+}
+
+# Allow MSK service to read the secret
+resource "aws_secretsmanager_secret_policy" "kafka_scram_client" {
+  secret_arn = aws_secretsmanager_secret.kafka_scram_client.arn
+  policy = jsonencode({
+    Version   = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "AllowKafkaToUseSecret",
+        Effect    = "Allow",
+        Principal = { Service = "kafka.amazonaws.com" },
+        Action    = [
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:ListSecretVersionIds"
+        ],
+        Resource = aws_secretsmanager_secret.kafka_scram_client.arn
+      }
+    ]
+  })
+}
+
+# Associate the SCRAM secret with MSK cluster
+resource "aws_msk_scram_secret_association" "kafka_scram" {
+  cluster_arn     = aws_msk_cluster.kafka.arn
+  secret_arn_list = [aws_secretsmanager_secret.kafka_scram_client.arn]
+
+  depends_on = [
+    aws_secretsmanager_secret_version.kafka_scram_client,
+    aws_secretsmanager_secret_policy.kafka_scram_client
+  ]
 }

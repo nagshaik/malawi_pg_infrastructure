@@ -11,6 +11,14 @@ resource "aws_security_group" "mongodb_sg" {
   }
 
   ingress {
+    from_port   = 27017
+    to_port     = 27017
+    protocol    = "tcp"
+    cidr_blocks = [var.cidr-block]
+    description = "Allow MongoDB access from VPC (includes EKS pods)"
+  }
+
+  ingress {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -29,6 +37,9 @@ resource "aws_security_group" "mongodb_sg" {
     Env  = var.env
   }
 }
+
+# Note: VPC CIDR ingress rule above already allows all EKS pods to access MongoDB
+# No need for separate EKS cluster security group rule
 
 resource "aws_instance" "mongodb" {
   ami                    = var.mongodb_ami_id
