@@ -9,10 +9,10 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '10'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/subnets: subnet-0ee8553b798281422, subnet-01305039c8b7ea096
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/healthcheck-path: /checkout/health
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
 spec:
@@ -39,8 +39,8 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '20'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /callback/health
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
 spec:
@@ -67,8 +67,8 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '30'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /consumer/health
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
 spec:
@@ -95,8 +95,8 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '40'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /c2b/health
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
 spec:
@@ -123,8 +123,8 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '50'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /admin/health
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
 spec:
@@ -151,8 +151,8 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '60'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /adminservice/health
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
 spec:
@@ -179,10 +179,10 @@ metadata:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '70'
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /authenticator/health
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
-    alb.ingress.kubernetes.io/success-codes: '200,201,204,404'
+    alb.ingress.kubernetes.io/success-codes: '200,201,204'
 spec:
   ingressClassName: alb
   rules:

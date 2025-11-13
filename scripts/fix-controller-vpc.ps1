@@ -1,4 +1,4 @@
-# Script to fix AWS Load Balancer Controller VPC configuration
+# [DEPRECATED] Script to fix AWS Load Balancer Controller VPC configuration
 # Adds --aws-vpc-id and --cluster-name flags to the controller deployment
 
 $CLUSTER_NAME = "malawi-pg-azampay-eks-cluster"
