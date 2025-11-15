@@ -1,2 +1,13 @@
-.terraform*
-terraform*
+# Terraform
+**/.terraform/
+**/.terraform.lock.hcl
+**/tfplan
+**/tfplan.binary
+**/*.tfstate
+**/*.tfstate.backup
+
+# Sensitive files
+**/dev.tfvars
+**/prod.tfvars
+**/*-secrets.yaml
+**/*-creds.yaml
