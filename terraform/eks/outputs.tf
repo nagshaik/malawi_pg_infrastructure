@@ -30,6 +30,21 @@ output "kibana_public_url" {
   value       = module.eks.kibana_public_url
 }
 
+output "kibana_alb_dns_name" {
+  description = "DNS name of Kibana ALB (map this to your domain in Route53)"
+  value       = module.eks.kibana_alb_dns_name
+}
+
+output "kibana_alb_zone_id" {
+  description = "Route53 Zone ID of Kibana ALB (for ALIAS records)"
+  value       = module.eks.kibana_alb_zone_id
+}
+
+output "kibana_alb_url" {
+  description = "URL to access Kibana via Application Load Balancer"
+  value       = module.eks.kibana_alb_url
+}
+
 output "elk_snapshot_bucket" {
   description = "S3 bucket for ELK snapshots and backups"
   value       = module.eks.elk_snapshot_bucket

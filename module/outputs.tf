@@ -172,6 +172,21 @@ output "kibana_public_url" {
   value       = "http://${aws_eip.kibana.public_ip}"
 }
 
+output "kibana_alb_dns_name" {
+  description = "DNS name of Kibana Application Load Balancer (map this to your domain)"
+  value       = aws_lb.kibana_alb.dns_name
+}
+
+output "kibana_alb_zone_id" {
+  description = "Route53 Zone ID of Kibana ALB (for creating ALIAS records)"
+  value       = aws_lb.kibana_alb.zone_id
+}
+
+output "kibana_alb_url" {
+  description = "URL for Kibana via ALB"
+  value       = "http://${aws_lb.kibana_alb.dns_name}"
+}
+
 output "elk_snapshot_bucket" {
   description = "S3 bucket for ELK snapshots"
   value       = aws_s3_bucket.elk_snapshots.id
