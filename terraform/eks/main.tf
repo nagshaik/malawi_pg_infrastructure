@@ -4,7 +4,7 @@ locals {
 }
 
 module "eks" {
-  source = "../module"
+  source = "../../module"
 
   # Region and Environment
   aws-region = var.aws-region
@@ -129,6 +129,18 @@ module "eks" {
   elk_free_storage_alarm_threshold   = var.elk_free_storage_alarm_threshold
   elk_cpu_alarm_threshold            = var.elk_cpu_alarm_threshold
   elk_jvm_memory_alarm_threshold     = var.elk_jvm_memory_alarm_threshold
+
+  # ELK EC2 Configuration (Self-Managed)
+  elk_ami_id                  = var.elk_ami_id
+  elk_version                 = var.elk_version
+  elk_data_node_count         = var.elk_data_node_count
+  elk_kibana_instance_type    = var.elk_kibana_instance_type
+  elk_heap_size_gb            = var.elk_heap_size_gb
+  elk_snapshot_retention_days = var.elk_snapshot_retention_days
+  elk_security_enabled        = var.elk_security_enabled
+  elk_es_username             = var.elk_es_username
+  elk_es_password             = var.elk_es_password
+  elk_es_service_token        = var.elk_es_service_token
 
   # AWS Credentials
   aws_access_key_id     = var.aws_access_key_id

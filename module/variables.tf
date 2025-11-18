@@ -470,10 +470,76 @@ variable "elk_cpu_alarm_threshold" {
   default     = 80
 }
 
+# Security settings for Elasticsearch/Kibana
+variable "elk_security_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable Elasticsearch security (TLS + auth) and configure Kibana to use HTTPS"
+}
+
+variable "elk_es_username" {
+  type        = string
+  default     = "elastic"
+  description = "Username Kibana uses to authenticate to Elasticsearch when security is enabled"
+}
+
+variable "elk_es_password" {
+  type        = string
+  sensitive   = true
+  default     = ""
+  description = "Password Kibana uses to authenticate to Elasticsearch when security is enabled"
+}
+
+variable "elk_es_service_token" {
+  type        = string
+  sensitive   = true
+  default     = ""
+  description = "Elasticsearch service account token for Kibana (preferred over username/password)"
+}
+
 variable "elk_jvm_memory_alarm_threshold" {
   type        = number
   description = "JVM memory pressure alarm threshold (percentage)"
   default     = 85
 }
+
+# ELK EC2 Variables (for self-managed stack)
+variable "elk_ami_id" {
+  type        = string
+  description = "AMI ID for ELK instances (Ubuntu)"
+  default     = ""
+}
+
+variable "elk_version" {
+  type        = string
+  description = "Elasticsearch/Kibana version"
+  default     = "8.11.3"
+}
+
+variable "elk_data_node_count" {
+  type        = number
+  description = "Number of Elasticsearch data nodes"
+  default     = 2
+}
+
+variable "elk_kibana_instance_type" {
+  type        = string
+  description = "Instance type for Kibana"
+  default     = "t3.large"
+}
+
+variable "elk_heap_size_gb" {
+  type        = number
+  description = "Elasticsearch JVM heap size in GB"
+  default     = 8
+}
+
+variable "elk_snapshot_retention_days" {
+  type        = number
+  description = "Number of days to retain snapshots in S3"
+  default     = 30
+}
+
+
 
 

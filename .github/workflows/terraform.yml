@@ -34,7 +34,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: eks
+        working-directory: terraform/eks
 
     steps:
       - name: Checkout repository

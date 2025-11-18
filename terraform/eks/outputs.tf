@@ -14,50 +14,25 @@ output "eks_cluster_role_arn" {
   value = module.eks.eks_cluster_role_arn
 }
 
-# ELK (OpenSearch) Outputs
-output "elk_domain_endpoint" {
-  description = "OpenSearch domain endpoint for API access"
-  value       = module.eks.elk_domain_endpoint
+# ELK EC2 Outputs (Self-Managed)
+output "elasticsearch_private_ips" {
+  description = "Private IP addresses of Elasticsearch nodes"
+  value       = module.eks.elasticsearch_private_ips
 }
 
-output "elk_dashboard_endpoint" {
-  description = "OpenSearch Dashboards endpoint for web UI access"
-  value       = module.eks.elk_dashboard_endpoint
+output "kibana_public_ip" {
+  description = "Public IP address of Kibana dashboard"
+  value       = module.eks.kibana_public_ip
 }
 
-output "elk_domain_arn" {
-  description = "ARN of the OpenSearch domain"
-  value       = module.eks.elk_domain_arn
+output "kibana_public_url" {
+  description = "Public URL for Kibana dashboard (use this to access Kibana)"
+  value       = module.eks.kibana_public_url
 }
 
-output "elk_domain_id" {
-  description = "Unique identifier for the OpenSearch domain"
-  value       = module.eks.elk_domain_id
-}
-
-output "elk_security_group_id" {
-  description = "Security group ID for the ELK cluster"
-  value       = module.eks.elk_security_group_id
-}
-
-output "elk_cloudwatch_log_group_application" {
-  description = "CloudWatch log group for OpenSearch application logs"
-  value       = module.eks.elk_cloudwatch_log_group_application
-}
-
-output "elk_cloudwatch_log_group_index" {
-  description = "CloudWatch log group for OpenSearch index slow logs"
-  value       = module.eks.elk_cloudwatch_log_group_index
-}
-
-output "elk_cloudwatch_log_group_search" {
-  description = "CloudWatch log group for OpenSearch search slow logs"
-  value       = module.eks.elk_cloudwatch_log_group_search
-}
-
-output "elk_cloudwatch_log_group_audit" {
-  description = "CloudWatch log group for OpenSearch audit logs"
-  value       = module.eks.elk_cloudwatch_log_group_audit
+output "elk_snapshot_bucket" {
+  description = "S3 bucket for ELK snapshots and backups"
+  value       = module.eks.elk_snapshot_bucket
 }
 
 # VPC Link and API Gateway Outputs
