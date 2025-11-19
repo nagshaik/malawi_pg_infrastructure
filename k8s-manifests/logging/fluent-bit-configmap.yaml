@@ -71,13 +71,13 @@ data:
     [OUTPUT]
         Name                es
         Match               kube.*
-        Host                vpc-malawi-pg-elk-cluster-s5fqgvti5w3popzer6dv5ziz5m.eu-central-1.es.amazonaws.com
-        Port                443
+        Host                10.16.128.10
+        Port                9200
         Logstash_Format     On
         Logstash_Prefix     new_cluster_logs
         Logstash_DateFormat %Y.%m.%d
-        HTTP_User           admin
-        HTTP_Passwd         MalawiELK2025!Secure#
+        HTTP_User           elastic
+        HTTP_Passwd         PHQ3-8l4ac8AhtTAOVFi
         Replace_Dots        On
         tls                 On
         tls.verify          Off
