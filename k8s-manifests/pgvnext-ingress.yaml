@@ -8,7 +8,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '10'
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/subnets: subnet-0ee8553b798281422, subnet-01305039c8b7ea096
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
@@ -18,9 +18,10 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: payments-checkout-ef.azampay.com
+    http:
       paths:
-      - path: /checkout
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -38,7 +39,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '20'
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
@@ -46,9 +47,10 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: payments-callback-ef.azampay.com
+    http:
       paths:
-      - path: /callback
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -66,7 +68,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '30'
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
@@ -74,9 +76,10 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: payments-consumer-ef.azampay.com
+    http:
       paths:
-      - path: /consumer
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -94,7 +97,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '40'
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
@@ -102,9 +105,10 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: payments-core-ef.azampay.com
+    http:
       paths:
-      - path: /c2b
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -122,7 +126,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '50'
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
@@ -130,9 +134,10 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: payments-admin-ef.azampay.com
+    http:
       paths:
-      - path: /admin
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -150,7 +155,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '60'
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
@@ -158,9 +163,10 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: payments-adminservice-ef.azampay.com
+    http:
       paths:
-      - path: /adminservice
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -178,7 +184,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
     alb.ingress.kubernetes.io/group.order: '70'
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/healthcheck-path: /health/ready
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
@@ -186,9 +192,10 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: payments-authenticator-ef.azampay.com
+    http:
       paths:
-      - path: /authenticator
+      - path: /
         pathType: Prefix
         backend:
           service:
