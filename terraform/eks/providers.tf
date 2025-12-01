@@ -24,7 +24,7 @@ provider "aws" {
   region = var.aws-region
 }
 
-# AWS provider for us-east-1 (required for CloudFront WAF)
+# Secondary provider retained for future regional resources
 provider "aws" {
   alias  = "us_east_1"
   region = "us-east-1"

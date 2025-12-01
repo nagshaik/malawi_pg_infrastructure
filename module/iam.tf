@@ -1,15 +1,14 @@
 locals {
   cluster_name = var.cluster-name
+  # Fixed suffix to match existing deployed resources
+  role_suffix = "6735"
 }
 
-resource "random_integer" "random_suffix" {
-  min = 1000
-  max = 9999
-}
+# Removed random_integer.random_suffix resource - using fixed suffix for existing roles
 
 resource "aws_iam_role" "eks-cluster-role" {
   count = var.is_eks_role_enabled ? 1 : 0
-  name  = "${local.cluster_name}-role-${random_integer.random_suffix.result}"
+  name  = "${local.cluster_name}-role-${local.role_suffix}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -31,7 +30,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
 
 resource "aws_iam_role" "eks-nodegroup-role" {
   count = var.is_eks_nodegroup_role_enabled ? 1 : 0
-  name  = "${local.cluster_name}-nodegroup-role-${random_integer.random_suffix.result}"
+  name  = "${local.cluster_name}-nodegroup-role-${local.role_suffix}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

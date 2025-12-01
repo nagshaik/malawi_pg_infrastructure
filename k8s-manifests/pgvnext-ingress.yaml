@@ -3,7 +3,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prod-pgvnext-checkout-api-ingress
+  name: pgvnext-checkout-api-ingress
   namespace: ns-pgvnext-checkout-api
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
@@ -34,7 +34,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prod-pgvnext-checkout-background-service-ingress
+  name: pgvnext-checkout-bg-ingress
   namespace: ns-pgvnext-checkout-background-service
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
@@ -63,7 +63,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prod-pgvnext-consumer-api-ingress
+  name: pgvnext-consumer-api-ingress
   namespace: ns-pgvnext-consumer-api
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
@@ -92,7 +92,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prod-ingress
+  name: pgvnext-core-api-ingress
   namespace: ns-pgvnext-core-api
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
@@ -121,7 +121,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prod-pgvnext-admin-panel-ingress
+  name: pgvnext-admin-panel-ingress
   namespace: prod-pgvnext-admin-panel-app-namespace
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
@@ -150,7 +150,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prod-pgvnext-admin-panel-service-ingress
+  name: pgvnext-admin-api-ingress
   namespace: prod-pgvnext-admin-panel-service-app-namespace
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
@@ -179,7 +179,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prod-pgvnext-authenticator-ingress
+  name: pgvnext-authenticator-ingress
   namespace: prod-pgvnext-authenticator-app-namespace
   annotations:
     alb.ingress.kubernetes.io/group.name: pgvnext-shared-alb
