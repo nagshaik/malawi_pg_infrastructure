@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-server-clb
+  namespace: argocd
+  annotations:
+    # Force classic ELB (legacy) instead of NLB/ALB
+    service.beta.kubernetes.io/aws-load-balancer-type: classic
+    # Optional idle timeout (seconds) for CLB
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+    # If you later add SSL termination at ELB layer, add certificate annotation below.
+    # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:550347237240:certificate/<CERT_ID>
+    # service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: argocd-server
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: https
+      port: 443
+      targetPort: 8080

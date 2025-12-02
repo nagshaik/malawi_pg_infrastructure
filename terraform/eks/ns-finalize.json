@@ -1,0 +1,59 @@
+{
+    "apiVersion":  "v1",
+    "kind":  "Namespace",
+    "metadata":  {
+                     "creationTimestamp":  "2025-12-01T10:01:05Z",
+                     "deletionTimestamp":  "2025-12-01T16:21:53Z",
+                     "labels":  {
+                                    "kubernetes.io/metadata.name":  "argocd"
+                                },
+                     "name":  "argocd",
+                     "resourceVersion":  "139270",
+                     "uid":  "dedef918-209d-4523-85ad-67072fc0d46a"
+                 },
+    "spec":  {
+                 "finalizers":  [
+
+                                ]
+             },
+    "status":  {
+                   "conditions":  [
+                                      {
+                                          "lastTransitionTime":  "2025-12-01T16:21:59Z",
+                                          "message":  "All resources successfully discovered",
+                                          "reason":  "ResourcesDiscovered",
+                                          "status":  "False",
+                                          "type":  "NamespaceDeletionDiscoveryFailure"
+                                      },
+                                      {
+                                          "lastTransitionTime":  "2025-12-01T16:21:59Z",
+                                          "message":  "All legacy kube types successfully parsed",
+                                          "reason":  "ParsedGroupVersions",
+                                          "status":  "False",
+                                          "type":  "NamespaceDeletionGroupVersionParsingFailure"
+                                      },
+                                      {
+                                          "lastTransitionTime":  "2025-12-01T16:21:59Z",
+                                          "message":  "All content successfully deleted, may be waiting on finalization",
+                                          "reason":  "ContentDeleted",
+                                          "status":  "False",
+                                          "type":  "NamespaceDeletionContentFailure"
+                                      },
+                                      {
+                                          "lastTransitionTime":  "2025-12-01T16:22:06Z",
+                                          "message":  "Some resources are remaining: applications.argoproj.io has 7 resource instances, ingresses.networking.k8s.io has 1 resource instances",
+                                          "reason":  "SomeResourcesRemain",
+                                          "status":  "True",
+                                          "type":  "NamespaceContentRemaining"
+                                      },
+                                      {
+                                          "lastTransitionTime":  "2025-12-01T16:22:06Z",
+                                          "message":  "Some content in the namespace has finalizers remaining: group.ingress.k8s.aws/pgvnext-shared-alb in 1 resource instances, resources-finalizer.argocd.argoproj.io in 7 resource instances, resources-finalizer.argocd.argoproj.io/foreground in 7 resource instances",
+                                          "reason":  "SomeFinalizersRemain",
+                                          "status":  "True",
+                                          "type":  "NamespaceFinalizersRemaining"
+                                      }
+                                  ],
+                   "phase":  "Terminating"
+               }
+}
