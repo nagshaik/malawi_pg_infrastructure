@@ -43,3 +43,37 @@ resource "aws_s3_bucket_lifecycle_configuration" "malawi_alb_access_logs" {
     }
   }
 }
+
+# Bucket policy to allow ALB log delivery
+resource "aws_s3_bucket_policy" "malawi_alb_access_logs" {
+  bucket = aws_s3_bucket.malawi_alb_access_logs.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "AWSLogDeliveryWrite"
+        Effect   = "Allow"
+        Principal = {
+          Service = "logdelivery.elasticloadbalancing.amazonaws.com"
+        }
+        Action   = "s3:PutObject"
+        Resource = "${aws_s3_bucket.malawi_alb_access_logs.arn}/eks-alb/AWSLogs/*"
+        Condition = {
+          StringEquals = {
+            "s3:x-amz-acl" = "bucket-owner-full-control"
+          }
+        }
+      },
+      {
+        Sid      = "AWSLogDeliveryAclCheck"
+        Effect   = "Allow"
+        Principal = {
+          Service = "logdelivery.elasticloadbalancing.amazonaws.com"
+        }
+        Action   = "s3:GetBucketAcl"
+        Resource = aws_s3_bucket.malawi_alb_access_logs.arn
+      }
+    ]
+  })
+}
