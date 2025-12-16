@@ -56,6 +56,11 @@ variable "aws-region" {
   description = "AWS region for the resources"
 }
 
+variable "aws_account_id" {
+  type        = string
+  description = "AWS account ID used for ALB log delivery policy conditions"
+}
+
 # Optional: static AWS credentials to bootstrap the bastion's AWS CLI.
 # Leave empty to rely on instance profile (recommended).
 variable "aws_access_key_id" {

@@ -74,6 +74,10 @@ resource "aws_s3_bucket_policy" "malawi_alb_access_logs" {
         Condition = {
           StringEquals = {
             "s3:x-amz-acl" = "bucket-owner-full-control"
+            "aws:SourceAccount"    = var.aws_account_id
+          }
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:elasticloadbalancing:${var.region}:${var.aws_account_id}:loadbalancer/app/*"
           }
         }
       },
