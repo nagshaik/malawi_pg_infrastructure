@@ -8,6 +8,7 @@ module "eks" {
 
   # Region and Environment
   aws-region = var.aws-region
+  aws_account_id = var.aws_account_id
   env        = var.env
 
   # VPC Configuration

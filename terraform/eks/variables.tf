@@ -1,4 +1,5 @@
 variable "aws-region" {}
+variable "aws_account_id" { }
 variable "env" {}
 variable "cluster-name" {}
 variable "vpc-cidr-block" {}
