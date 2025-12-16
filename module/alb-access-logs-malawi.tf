@@ -19,6 +19,15 @@ resource "aws_s3_bucket_public_access_block" "malawi_alb_access_logs" {
   restrict_public_buckets = true
 }
 
+# Ensure bucket owner owns objects written by ALB (avoids ACL issues)
+resource "aws_s3_bucket_ownership_controls" "malawi_alb_access_logs" {
+  bucket = aws_s3_bucket.malawi_alb_access_logs.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_bucket_versioning" "malawi_alb_access_logs" {
   bucket = aws_s3_bucket.malawi_alb_access_logs.id
 
@@ -59,11 +68,6 @@ resource "aws_s3_bucket_policy" "malawi_alb_access_logs" {
         }
         Action   = "s3:PutObject"
         Resource = "${aws_s3_bucket.malawi_alb_access_logs.arn}/eks-alb/AWSLogs/*"
-        Condition = {
-          StringEquals = {
-            "s3:x-amz-acl" = "bucket-owner-full-control"
-          }
-        }
       },
       {
         Sid      = "AWSLogDeliveryAclCheck"
